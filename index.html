@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biotech BD Signal Intelligence Stack</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Allura&family=Dancing+Script:wght@400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e27;
+            color: #fff;
+            overflow-x: auto;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+        
+        /* Floating particles effect */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 1%),
+                radial-gradient(circle at 80% 20%, rgba(102, 126, 234, 0.3) 0%, transparent 1%),
+                radial-gradient(circle at 40% 40%, rgba(168, 85, 247, 0.3) 0%, transparent 1%),
+                radial-gradient(circle at 90% 70%, rgba(59, 130, 246, 0.3) 0%, transparent 1%);
+            background-size: 300px 300px, 200px 200px, 250px 250px, 150px 150px;
+            animation: floatParticles 20s ease-in-out infinite;
+            z-index: 0;
+        }
+        
+        @keyframes floatParticles {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(-30px, -50px) scale(1.1);
+            }
+            50% {
+                transform: translate(50px, -30px) scale(0.9);
+            }
+            75% {
+                transform: translate(-20px, 40px) scale(1.05);
+            }
+        }
+        
+        /* Technical grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes signatureFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 0.8;
+                transform: translateY(0);
+            }
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1900px;
+            margin: 0 auto;
+            position: relative;
+            padding-bottom: 50px;
+            z-index: 1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header h1 {
+            font-size: 3.25em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        /* Animated text shimmer */
+        .header h1::before {
+            content: 'Biotech BD Signal Intelligence Stack';
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.4) 50%,
+                transparent 100%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 100%;
+            animation: shimmer 8s linear infinite;
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+        
+        .header p {
+            color: #8b92b9;
+            font-size: 1.43em;
+            margin-bottom: 5px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.5s;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Mini routing map */
+        .routing-minimap {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 200px;
+            height: 140px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 8px;
+            padding: 0;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            opacity: 0.8;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        
+        .routing-minimap:hover {
+            opacity: 1;
+        }
+        
+        .minimap-title {
+            font-size: 0.8em;
+            color: #667eea;
+            margin: 0 0 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .minimap-content {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.7em;
+            margin: 0;
+            align-items: center;
+        }
+        
+        .minimap-phase {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        
+        .minimap-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        /* Pipeline Stats */
+        .pipeline-stats {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            border-radius: 10px;
+            padding: 16px 20px;
+            backdrop-filter: blur(15px);
+            z-index: 100;
+            font-size: 0.85em;
+            min-width: 180px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stats-title {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1em;
+            letter-spacing: 0.5px;
+        }
+        
+        .stat-item {
+            color: #e0e0e0;
+            margin-bottom: 4px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+        
+        /* Visual Comparison Box */
+        .comparison-box {
+            position: absolute;
+            left: 30px;
+            top: 650px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 20px;
+            border-radius: 14px;
+            border-left: 4px solid #667eea;
+            backdrop-filter: blur(15px);
+            width: 560px;
+            display: flex;
+            gap: 24px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 40px rgba(102, 126, 234, 0.2);
+            z-index: 10;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .comparison-side {
+            flex: 1;
+        }
+        
+        .traditional-bd {
+            color: #ef4444;
+        }
+        
+        .my-stack {
+            color: #22c55e;
+        }
+        
+        .comparison-side h5 {
+            font-size: 1em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        .comparison-side div {
+            font-size: 0.85em;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+        
+        .flex-statement {
+            border-left: 3px solid #a855f7;
+            padding-left: 18px;
+            color: #e0e0e0;
+        }
+        
+        .flex-statement h5 {
+            color: #a855f7;
+            font-size: 1em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .flex-statement ul {
+            list-style: none;
+            font-size: 0.8em;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .flex-statement li {
+            margin-bottom: 5px;
+        }
+        
+        /* Strategic Outputs Panel */
+        .strategic-outputs {
+            position: absolute;
+            top: 20px;
+            right: -200px;
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 20px;
+            width: 360px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(102, 126, 234, 0.3);
+            z-index: 10;
+        }
+        
+        .strategic-outputs h3 {
+            color: #667eea;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .strategic-outputs p {
+            font-size: 0.8em;
+            color: #8b92b9;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+        
+        .output-item {
+            background: 
+                linear-gradient(90deg, rgba(102, 126, 234, 0.1) 0%, rgba(102, 126, 234, 0.05) 100%),
+                rgba(255, 255, 255, 0.03);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #667eea;
+            font-size: 0.9em;
+            line-height: 1.4;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            transform: translateX(0);
+        }
+        
+        .output-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -3px;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, #667eea, transparent);
+            animation: scan 3s linear infinite;
+        }
+        
+        .output-item::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            width: 6px;
+            height: 6px;
+            background: #667eea;
+            border-radius: 50%;
+            transform: translateY(-50%);
+            opacity: 0.5;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .output-item:hover {
+            transform: translateX(5px);
+            background: 
+                linear-gradient(90deg, rgba(102, 126, 234, 0.15) 0%, rgba(102, 126, 234, 0.08) 100%),
+                rgba(255, 255, 255, 0.05);
+            box-shadow: 
+                0 2px 10px rgba(102, 126, 234, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 0.5;
+                transform: translateY(-50%) scale(1);
+            }
+            50% { 
+                opacity: 1;
+                transform: translateY(-50%) scale(1.2);
+            }
+        }
+        
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        
+        /* Command Center */
+        .command-center {
+            margin: 250px auto 80px;
+            max-width: 375px;
+            background: 
+                radial-gradient(ellipse at center, rgba(168, 85, 247, 0.2) 0%, rgba(168, 85, 247, 0.05) 70%),
+                linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(102, 126, 234, 0.1) 100%);
+            border: 3px solid transparent;
+            border-radius: 16px;
+            padding: 18px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 0 40px rgba(168, 85, 247, 0.5),
+                0 10px 30px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+            position: relative;
+            transform: scale(0.575);
+            z-index: 20;
+            background-image: 
+                radial-gradient(ellipse at center, rgba(168, 85, 247, 0.2) 0%, rgba(168, 85, 247, 0.05) 70%),
+                linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(102, 126, 234, 0.1) 100%),
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 10px,
+                    rgba(168, 85, 247, 0.03) 10px,
+                    rgba(168, 85, 247, 0.03) 20px
+                );
+            background-clip: padding-box;
+            border-image: linear-gradient(45deg, #a855f7, #667eea, #a855f7) 1;
+        }
+        
+        .command-center::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: conic-gradient(
+                from 0deg at 50% 50%,
+                #a855f7 0deg,
+                #667eea 90deg,
+                #a855f7 180deg,
+                #667eea 270deg,
+                #a855f7 360deg
+            );
+            border-radius: 16px;
+            opacity: 0.5;
+            animation: borderRotate 8s linear infinite;
+            z-index: -1;
+            filter: blur(2px);
+        }
+        
+        @keyframes borderRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .command-center h3 {
+            color: #a855f7;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .command-center p {
+            color: #e0e0e0;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        /* Pipeline Container */
+        .pipeline {
+            background: 
+                linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%),
+                radial-gradient(ellipse at top left, rgba(102, 126, 234, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom right, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+                rgba(255, 255, 255, 0.01);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 750px;
+            margin-left: 20px;
+            margin-right: 20px;
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 5;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        /* Swimlanes */
+        .swimlane {
+            margin-bottom: 50px;
+            position: relative;
+            padding: 25px;
+            border-radius: 12px;
+            background: 
+                linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%),
+                rgba(255, 255, 255, 0.02);
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            transform: perspective(1000px) rotateX(0deg);
+        }
+        
+        .swimlane::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 5%;
+            right: 5%;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            filter: blur(15px);
+            border-radius: 50%;
+            opacity: 0.5;
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+        
+        .swimlane:hover {
+            transform: perspective(1000px) rotateX(2deg) translateY(-5px);
+            box-shadow: 
+                0 8px 30px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .swimlane:hover::after {
+            bottom: -15px;
+            opacity: 0.3;
+            left: 3%;
+            right: 3%;
+        }
+        
+        /* Enhanced phase-specific glows */
+        .biotech-signal-discovery:hover {
+            box-shadow: 
+                0 8px 30px rgba(59, 130, 246, 0.3),
+                inset 0 1px 0 rgba(59, 130, 246, 0.2);
+        }
+        
+        .opportunity-validation:hover {
+            box-shadow: 
+                0 8px 30px rgba(168, 85, 247, 0.3),
+                inset 0 1px 0 rgba(168, 85, 247, 0.2);
+        }
+        
+        .lead-enrichment:hover {
+            box-shadow: 
+                0 8px 30px rgba(34, 197, 94, 0.3),
+                inset 0 1px 0 rgba(34, 197, 94, 0.2);
+        }
+        
+        .personalized-messaging:hover {
+            box-shadow: 
+                0 8px 30px rgba(251, 146, 60, 0.3),
+                inset 0 1px 0 rgba(251, 146, 60, 0.2);
+        }
+        
+        .signal-qa:hover {
+            box-shadow: 
+                0 8px 30px rgba(239, 68, 68, 0.3),
+                inset 0 1px 0 rgba(239, 68, 68, 0.2);
+        }
+        
+        .swimlane-title {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #0a0e27;
+            padding: 0 15px;
+            font-weight: 600;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .swimlane-annotation {
+            font-size: 0.8em;
+            color: #8b92b9;
+            margin-bottom: 20px;
+            font-style: italic;
+            line-height: 1.4;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+        
+        /* Phase Colors */
+        .biotech-signal-discovery {
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            background: rgba(59, 130, 246, 0.05);
+        }
+        .biotech-signal-discovery .swimlane-title { color: #3b82f6; }
+        
+        .opportunity-validation {
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            background: rgba(168, 85, 247, 0.05);
+        }
+        .opportunity-validation .swimlane-title { color: #a855f7; }
+        
+        .lead-enrichment {
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            background: rgba(34, 197, 94, 0.05);
+        }
+        .lead-enrichment .swimlane-title { color: #22c55e; }
+        
+        .personalized-messaging {
+            border: 1px solid rgba(251, 146, 60, 0.3);
+            background: rgba(251, 146, 60, 0.05);
+        }
+        .personalized-messaging .swimlane-title { color: #fb923c; }
+        
+        .signal-qa {
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.05);
+        }
+        .signal-qa .swimlane-title { color: #ef4444; }
+        
+        /* GPT Nodes */
+        .node {
+            background: 
+                linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%),
+                rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 18px;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-width: 200px;
+            animation: nodeBreath 4s ease-in-out infinite;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+        }
+        
+        .node::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            border-radius: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .node:hover::before {
+            opacity: 1;
+        }
+        
+        @keyframes nodeBreath {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .node::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 6px;
+            height: 6px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes statusPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .node:hover {
+            transform: translateY(-4px) scale(1.05);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
+                        0 0 30px rgba(102, 126, 234, 0.2);
+            animation: none;
+        }
+        
+        .node h4 {
+            font-size: 0.9em;
+            margin-bottom: 6px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+        
+        .node p {
+            font-size: 0.75em;
+            color: #8b92b9;
+            line-height: 1.5;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+        
+        /* Entry point styling */
+        .entry-point {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: #3b82f6;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+        }
+        
+        .entry-point::after {
+            background: #3b82f6;
+        }
+        
+        .convergence-point {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.3),
+                        0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: nodeBreath 3s ease-in-out infinite;
+        }
+        
+        .convergence-point::after {
+            background: #a855f7;
+        }
+        
+        /* Number badges */
+        .node-number {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: conic-gradient(
+                from 0deg,
+                #667eea 0deg,
+                #764ba2 120deg,
+                #667eea 240deg,
+                #764ba2 360deg
+            );
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            box-shadow: 
+                0 2px 8px rgba(102, 126, 234, 0.5),
+                inset 0 0 0 2px #0a0e27;
+            animation: rotateGradient 10s linear infinite;
+        }
+        
+        @keyframes rotateGradient {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+        
+        /* Flow Visualization */
+        .node-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .linear-flow {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        /* Enhanced arrows */
+        .arrow {
+            width: 30px;
+            height: 2px;
+            background: rgba(102, 126, 234, 0.3);
+            position: relative;
+            flex-shrink: 0;
+            overflow: visible;
+            filter: drop-shadow(0 0 3px rgba(102, 126, 234, 0.5));
+        }
+        
+        .arrow::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -100%;
+            width: 100%;
+            height: 6px;
+            background: 
+                radial-gradient(ellipse at center, #667eea 0%, transparent 70%),
+                linear-gradient(90deg, transparent, #667eea, transparent);
+            animation: dataFlow 2s linear infinite;
+            filter: blur(1px);
+        }
+        
+        .arrow::after {
+            content: '';
+            position: absolute;
+            right: -2px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid #667eea;
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+            filter: drop-shadow(0 0 3px rgba(102, 126, 234, 0.8));
+            animation: arrowPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes arrowPulse {
+            0%, 100% { filter: drop-shadow(0 0 3px rgba(102, 126, 234, 0.8)); }
+            50% { filter: drop-shadow(0 0 6px rgba(102, 126, 234, 1)); }
+        }
+        
+        @keyframes dataFlow {
+            0% { transform: translateX(0); opacity: 1; }
+            100% { transform: translateX(200%); opacity: 0; }
+        }
+        
+        /* Example Tooltips */
+        .example-tooltip {
+            position: absolute;
+            background: rgba(102, 126, 234, 0.95);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            max-width: 280px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            top: -70px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            white-space: normal;
+            line-height: 1.4;
+        }
+        
+        .node:hover .example-tooltip {
+            opacity: 1;
+        }
+        
+        /* Author Signature */
+        .author-signature {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 200;
+            opacity: 0;
+            animation: signatureFadeIn 1s ease-out forwards;
+            animation-delay: 2s;
+            font-family: 'Great Vibes', 'Dancing Script', 'Brush Script MT', cursive;
+            font-size: 24px;
+            color: #EAEAEA;
+            text-shadow: 1px 2px 3px rgba(0,0,0,0.4);
+            transform: rotate(-1.5deg);
+            white-space: nowrap;
+            pointer-events: none;
+            width: auto;
+            min-width: 200px;
+            text-align: right;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 1600px) {
+            .node-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .strategic-outputs,
+            .comparison-box {
+                position: relative;
+                width: 100%;
+                margin-bottom: 20px;
+                top: auto;
+                right: auto;
+                left: auto;
+            }
+            
+            .pipeline {
+                margin-left: 20px;
+                margin-top: 100px;
+            }
+            
+            .routing-minimap,
+            .pipeline-stats {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .linear-flow {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+                margin: 20px 0;
+            }
+            
+            .comparison-box {
+                flex-direction: column;
+            }
+            
+            .command-center {
+                transform: scale(0.5);
+            }
+            
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .header p {
+                font-size: 1.1em;
+            }
+        }
+        
+        /* Initial load animations */
+        .command-center {
+            opacity: 0;
+            animation: 
+                zoomFadeIn 0.8s ease-out forwards,
+                borderRotate 8s linear infinite;
+            animation-delay: 0.8s, 0s;
+        }
+        
+        @keyframes zoomFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.4);
+            }
+            to {
+                opacity: 1;
+                transform: scale(0.575);
+            }
+        }
+        
+        .swimlane {
+            opacity: 0;
+            animation: slideInFromBottom 0.6s ease-out forwards;
+        }
+        
+        .biotech-signal-discovery { animation-delay: 1s; }
+        .opportunity-validation { animation-delay: 1.1s; }
+        .lead-enrichment { animation-delay: 1.2s; }
+        .personalized-messaging { animation-delay: 1.3s; }
+        .signal-qa { animation-delay: 1.4s; }
+        
+        @keyframes slideInFromBottom {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .comparison-box, .strategic-outputs {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+            animation-delay: 1.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Biotech BD Signal Intelligence Stack</h1>
+            <p>AI-Native BD Architecture, Orchestrated by 21+ GPT Agents to Decode Signals, Route Prospects, and Trigger Strategic Outreach</p>
+        </div>
+        
+        <!-- Routing Minimap -->
+        <div class="routing-minimap">
+            <div class="minimap-title">Pipeline Overview</div>
+            <div class="minimap-content">
+                <div class="minimap-phase">
+                    <div class="minimap-dot" style="background: #3b82f6;"></div>
+                    <span>Signal Discovery (4)</span>
+                </div>
+                <div class="minimap-phase">
+                    <div class="minimap-dot" style="background: #a855f7;"></div>
+                    <span>Validation (2)</span>
+                </div>
+                <div class="minimap-phase">
+                    <div class="minimap-dot" style="background: #22c55e;"></div>
+                    <span>Enrichment (6)</span>
+                </div>
+                <div class="minimap-phase">
+                    <div class="minimap-dot" style="background: #fb923c;"></div>
+                    <span>Messaging (3)</span>
+                </div>
+                <div class="minimap-phase">
+                    <div class="minimap-dot" style="background: #ef4444;"></div>
+                    <span>QA (4)</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Command Center -->
+        <div class="command-center">
+            <h3>🎮 Command Center</h3>
+            <p>Simulates a 21-agent BD pipeline. Routes signals, enforces schema logic, validates QA layers, and triggers fallback when necessary. Renders dashboards, trace maps, and signal metadata overlays.</p>
+        </div>
+        
+        <!-- Visual Comparison Box -->
+        <div class="comparison-box">
+            <div class="comparison-side traditional-bd">
+                <h5>🟥 Traditional BD</h5>
+                <div>• Scattered</div>
+                <div>• Slow</div>
+                <div>• Manual</div>
+            </div>
+            <div class="comparison-side my-stack">
+                <h5>🟩 My Stack</h5>
+                <div>• 🎯 Precision Targeting</div>
+                <div>• ⚡ Fast</div>
+                <div>• 🧠 Orchestrated</div>
+            </div>
+            <div class="flex-statement">
+                <h5>🟣 Modular. Surgical. Proven.</h5>
+                <ul>
+                    <li>• 21 GPT agents with routing logic</li>
+                    <li>• Calibrated to biotech BD signals</li>
+                    <li>• Final messaging always human-crafted</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Strategic Outputs -->
+        <div class="strategic-outputs">
+            <h3>📊 Strategic Outputs: Internal BD Intelligence</h3>
+            <p>Decision support outputs generated from the 21-agent pipeline for BD strategy and execution.</p>
+            <div class="output-item">📍 <strong>Site-Trial Fit Analysis:</strong> Dallas/Orlando trial feasibility with PI mapping and enrollment timeline validation</div>
+            <div class="output-item">🎯 <strong>Biotech Activity Monitoring:</strong> Series A-C funding alerts, M&A partnerships, and preclinical platform signals with urgency tagging</div>
+            <div class="output-item">🧠 <strong>Buyer Persona Intelligence:</strong> Role-specific targeting with therapeutic area expertise and platform alignment scoring</div>
+            <div class="output-item">📊 <strong>Lead Prioritization Matrix:</strong> Multi-factor scoring combining urgency, fit, modality match, and competitive landscape analysis</div>
+            <div class="output-item">✅ <strong>Outreach Readiness Assessment:</strong> Schema validation, compliance check, and contact verification before CRM sync</div>
+        </div>
+        
+        <div class="pipeline">
+            <!-- Biotech Signal Discovery -->
+            <div class="swimlane biotech-signal-discovery">
+                <div class="swimlane-title">🔵 Biotech Signal Discovery</div>
+                <div class="swimlane-annotation">
+                    These signal-detection GPTs are modular by design. While currently calibrated to biotech-relevant triggers (e.g., trial launches, funding, partnerships), they can be adapted to other verticals, geographies, or BD signals depending on business need.
+                </div>
+                <div class="node-container">
+                    <div class="node entry-point">
+                        <span class="node-number">1</span>
+                        <h4>📡 Signal Ingestor</h4>
+                        <p>Identifies timestamped, sponsor-led trials launching near Dallas or Orlando research sites</p>
+                        <div class="example-tooltip">
+                            "Detected: CDx trial for gastric cancer — onboarding 2 new sites near Dallas"
+                        </div>
+                    </div>
+                    
+                    <div class="node entry-point">
+                        <span class="node-number">2</span>
+                        <h4>🔍 InfraScout</h4>
+                        <p>Surfaces early biotech signals from preclinical AI/omics platforms lacking data infrastructure</p>
+                        <div class="example-tooltip">
+                            "Preclinical CRISPR platform using spatial transcriptomics — hiring 2 bioinformatics scientists, no data partner announced"
+                        </div>
+                    </div>
+                    
+                    <div class="node entry-point">
+                        <span class="node-number">3</span>
+                        <h4>🎯 Signal Scout</h4>
+                        <p>Flags Series A–C stage biotech leads with urgency, fit, and modality tags</p>
+                        <div class="example-tooltip">
+                            "Example: Series B oncology platform, modality: ADC, urgency: high (deal expected in 30–60 days)"
+                        </div>
+                    </div>
+                    
+                    <div class="node entry-point">
+                        <span class="node-number">4</span>
+                        <h4>💼 Biotech M&A + CRO Intel</h4>
+                        <p>Tracks strategic partnerships, mergers, and deals that signal trial or data enablement</p>
+                        <div class="example-tooltip">
+                            "Example: June 2025 – Merck x ReCode Therapeutics, $150M partnership on inhaled RNAi delivery (enablement trigger)"
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Opportunity Validation -->
+            <div class="swimlane opportunity-validation">
+                <div class="swimlane-title">🟣 Opportunity Validation</div>
+                <div style="display: flex; align-items: center; justify-content: space-around; gap: 20px; position: relative;">
+                    <div class="node">
+                        <h4>🚦 Feasibility Router</h4>
+                        <p>Scores trial-site feasibility for Dallas/Orlando. Applies BD heuristics and urgency logic</p>
+                        <div class="example-tooltip">
+                            "Example: Site fit confirmed for ADC trial (Orlando) — 2 relevant PIs, last enrollment in <6 months, no competing studies."
+                        </div>
+                    </div>
+                    <div class="arrow"></div>
+                    <div class="node convergence-point">
+                        <h4>👁️ Trigger Watcher</h4>
+                        <p>Validates signal recency and urgency, suppresses noise, routes GTM-ready leads</p>
+                        <div class="example-tooltip">
+                            "Example: Validated — urgency: high, recency: 14 days. Suppressed 2 duplicates."
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Lead Enrichment -->
+            <div class="swimlane lead-enrichment">
+                <div class="swimlane-title">🟢 Lead Enrichment</div>
+                <div class="linear-flow">
+                    <div class="node">
+                        <h4>⚙️ Core Prospect Engine</h4>
+                        <p>Scores lead strength using trial, platform, and funding metadata</p>
+                        <div class="example-tooltip">
+                            "Example: Fit score: 9.1 — AI oncology platform, $75M Series C, site-ready Q3."
+                        </div>
+                    </div>
+                    <div class="arrow"></div>
+                    
+                    <div class="node">
+                        <h4>🧬 Therapeutic Profiler</h4>
+                        <p>Tags therapeutic area, modality, and pain signal for GTM alignment</p>
+                        <div class="example-tooltip">
+                            "Example: Modality: CAR-T, Indication: DLBCL, Signal: 1st-line therapy with GTM fit."
+                        </div>
+                    </div>
+                    <div class="arrow"></div>
+                    
+                    <div class="node">
+                        <h4>🎯 Competitive Intelligence Module</h4>
+                        <p>Analyzes external signals to tag competitor activity, assess strategic threats, and generate battlecards</p>
+                        <div class="example-tooltip">
+                            "Example: Competitor alert — Gilead Phase II in same indication (Q2 2025), high overlap."
+                        </div>
+                    </div>
+                    <div class="arrow"></div>
+                    
+                    <div class="node">
+                        <h4>🔧 Tooling Signal Gate</h4>
+                        <p>Filters unverifiable, vague, or tooling-only signals via QA checkpoint</p>
+                        <div class="example-tooltip">
+                            "Example: Rejected — insufficient signal: lacks trial metadata, sponsor unclear, modality unspecified."
+                        </div>
+                    </div>
+                    <div class="arrow"></div>
+                    
+                    <div class="node">
+                        <h4>📊 Client Signal Ranker</h4>
+                        <p>Tiers lead urgency and fit; routes Tier 1 leads to BD or CRM</p>
+                        <div class="example-tooltip">
+                            "Example: Lead ranked Tier 1 — urgency: 4.8, CRM fit: strong, timing: aligned."
+                        </div>
+                    </div>
+                    <div class="arrow"></div>
+                    
+                    <div class="node">
+                        <h4>🎖️ BD Priority Sorter</h4>
+                        <p>Sorts daily GTM outreach by score, speed, and platform urgency</p>
+                        <div class="example-tooltip">
+                            "Example: Tier 1 — 4x urgency triggers, platform speed = high, GTM timing = now."
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Personalized Messaging -->
+            <div class="swimlane personalized-messaging">
+                <div class="swimlane-title">🟠 Personalized Messaging</div>
+                <div class="linear-flow">
+                    <div class="node">
+                        <h4>👤 Persona Intelligence Engine</h4>
+                        <p>Verifies buyer persona match, role relevance, and BD alignment</p>
+                        <div class="example-tooltip">
+                            "Example: Role match: VP Clinical Ops, fluent in AI stack, ex-Janssen BD."
+                        </div>
+                    </div>
+                    <div class="arrow"></div>
+                    
+                    <div class="node">
+                        <h4>📖 BD Playbook Generator</h4>
+                        <p>Converts lead metadata into BD narrative (problem → solution → CTA)</p>
+                        <div class="example-tooltip">
+                            "Example: \"Problem: No site capacity in FL. Solution: Data-backed trial fits in Orlando. CTA: Let's discuss timeline.\""
+                        </div>
+                    </div>
+                    <div class="arrow"></div>
+                    
+                    <div class="node">
+                        <h4>✉️ Mailer Builder</h4>
+                        <p>All final BD emails are reviewed and crafted manually using Playbook and CRM inputs. The GPTs assist with targeting and context alignment — not full automation.</p>
+                        <div class="example-tooltip">
+                            "Example: Final BD email: [Subject: Unlock Florida Sites for Q4 Launch] — crafted w/ CTA."
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Signal QA -->
+            <div class="swimlane signal-qa">
+                <div class="swimlane-title">🔴 Signal QA</div>
+                <div style="display: flex; align-items: center; justify-content: space-around; gap: 15px; position: relative;">
+                    <div class="node">
+                        <h4>🔍 Mailer Hallucination Auditor</h4>
+                        <p>Audits BD emails for tone, claim risk, and compliance flags</p>
+                        <div class="example-tooltip">
+                            "Example: Pass — tone aligned, no unsupported claims, risk: low."
+                        </div>
+                    </div>
+                    <div class="arrow"></div>
+                    
+                    <div class="node">
+                        <h4>🐛 Bug-Checker</h4>
+                        <p>Validates structure, schema, logic, and hallucination risk</p>
+                        <div class="example-tooltip">
+                            "Example: Flagged → schema mismatch (missing timestamp); retry triggered."
+                        </div>
+                    </div>
+                    <div class="arrow"></div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+                        <div class="node">
+                            <h4>🔄 QA Ring</h4>
+                            <p>Final outbound QA before CRM or send, triggers retry if needed</p>
+                            <div class="example-tooltip">
+                                "Example: Final check passed. Lead synced to CRM July 2025."
+                            </div>
+                        </div>
+                        
+                        <div class="node">
+                            <h4>✅ Email Verifier</h4>
+                            <p>Finds or corrects verified contact emails from public sources</p>
+                            <div class="example-tooltip">
+                                "Example: Verified ✅ — jane.doe@biotechai.com (matched via public bio + email pattern)."
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                        <div class="arrow" style="transform: rotate(45deg); width: 20px;"></div>
+                        <div class="arrow" style="transform: rotate(-45deg); width: 20px;"></div>
+                    </div>
+                    
+                    <div class="node" style="background: rgba(34, 197, 94, 0.2); border-color: #22c55e; box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);">
+                        <h4>✅ Cleared for CRM / Outreach</h4>
+                        <p>Final validated leads ready for CRM sync and BD outreach execution</p>
+                        <div class="example-tooltip">
+                            "Example: Lead cleared — CRM sync complete, BD outreach scheduled for next business day."
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pipeline Stats -->
+        <div class="pipeline-stats">
+            <div class="stats-title">Pipeline Stats</div>
+            <div class="stat-item">• 19 Active GPTs</div>
+            <div class="stat-item">• 4 Entry Points</div>
+            <div class="stat-item">• 5 Processing Phases</div>
+        </div>
+        
+        <!-- Author Signature -->
+        <div class="author-signature">
+            Built by Ryan Dallas
+        </div>
+    </div>
+</body>
+</html>
